@@ -20,24 +20,20 @@ public class LocalStorage {
         public static final  String FILE_NAME ="logs.txt";
     public static void savelog(Context context, String message) {
         try {
-            JSONObject logJson = new JSONObject();
-            SimpleDateFormat sdf = new SimpleDateFormat(
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                    Locale.getDefault()
-            );
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+         JSONObject logJson = new JSONObject(message);
+//            SimpleDateFormat sdf = new SimpleDateFormat(
+//                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+//                    Locale.getDefault()
+//            );
+//            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//
+//            String time = sdf.format(new Date());
+//            logJson.put("message", message);
 
-            String time = sdf.format(new Date());
-            logJson.put("message", message);
-            logJson.put("timeStamp", time);
-            logJson.put("level", "INFO");
-            logJson.put("device", android.os.Build.MODEL);
-            logJson.put("os", "Android " + android.os.Build.VERSION.RELEASE);
             FileOutputStream fos = context.openFileOutput(FILE_NAME, Context.MODE_APPEND);
-            fos.write((logJson.toString() + "\n").getBytes());
+            fos.write((logJson + "\n").getBytes());
             fos.close();
-            Log.d("LOCAL_STORAGE", "Saved JSON log: " + logJson.toString());
-
+            Log.d("LOCAL_STORAGE", "Saved JSON log: " + logJson);
         } catch (Exception e) {
             e.printStackTrace();
         }

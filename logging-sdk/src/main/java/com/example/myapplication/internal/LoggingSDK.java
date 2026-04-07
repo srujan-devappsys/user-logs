@@ -2,6 +2,8 @@ package com.example.myapplication.internal;
 
 import android.content.Context;
 
+import java.util.Map;
+
 public class LoggingSDK {
     private static Plugin plugin;
 
@@ -12,11 +14,11 @@ public class LoggingSDK {
                 plugin = Plugin.init(context,config);
             }
     }
-    public static void log(String message)
+    public static void log(int level, String message, Map<String, Object> properties)
     {
         if (plugin == null) {
             throw new IllegalStateException("SDK not initialized");
         }
-        plugin.log(message);
+        plugin.log(level, message, properties);
     }
     }

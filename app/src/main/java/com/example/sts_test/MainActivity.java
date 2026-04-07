@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.internal.LoggingSDK;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -12,10 +15,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        LoggingSDK.log("App Started");
-        LoggingSDK.log("App Started");
-        LoggingSDK.log("App Starteddddd");
-        LoggingSDK.log("App Starteddddd");
+        Map<String, Object> props = new HashMap<>();
+        props.put("screen", "MainActivity");
+        LoggingSDK.log(1,"App Started",props);
     }
 }
 

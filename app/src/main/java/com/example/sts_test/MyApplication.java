@@ -10,7 +10,10 @@ public class MyApplication extends Application{
                 .setClient("Client1")
                 .setProject("project1")
                 .setUserId("user1")
+                .setHost("server.com")
+                .setPort(9090)
+                .setBatchSize(10)
                 .build();
-            LoggingSDK.init(this,config);
+        LoggingSDK.init(this, config);
         }
 }
