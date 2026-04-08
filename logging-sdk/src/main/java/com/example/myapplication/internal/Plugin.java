@@ -92,7 +92,9 @@ public class Plugin {
 //        });
 //    }
     public void log(int level, String message, Map<String, Object> properties) {
+        Log.d("Country","country is "+config.getCountry());
         logInternal(level, message, null, properties);
+
     }
 
     private void logInternal(int level, String message, String stackTrace, Map<String, Object> properties) {
@@ -103,20 +105,31 @@ public class Plugin {
                 JSONObject logJson = new JSONObject();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                logJson.put("message", message);
-                logJson.put("event_time", sdf.format(new Date()));
-                logJson.put("level", level);
-                logJson.put("display_name", android.os.Build.MODEL);
-                logJson.put("os", "Android " + android.os.Build.VERSION.RELEASE);
-                logJson.put("event_type","USER_LOGIN");
-
-                if (stackTrace != null) {
-                    logJson.put("stackTrace", stackTrace);
-                }
+                JSONObject event = new JSONObject();
+                JSONObject data = new JSONObject();
+                //Event
+                event.put("UUID",config.getUserId());
+                event.put("event_type", "USER_LOGIN");
+                event.put("display_name", android.os.Build.MODEL);
+                event.put("message", message);
+                event.put("event_time", sdf.format(new Date()));
                 if (properties != null) {
                     JSONObject props = new JSONObject(properties);
-                    logJson.put("properties", props);
+                    event.put("properties", props);
                 }
+                if (stackTrace != null) {
+                    data.put("stackTrace", stackTrace);
+                }
+
+                //Data
+                data.put("Country",config.getCountry());
+                data.put("os", "Android " + android.os.Build.VERSION.RELEASE);
+                data.put("level", level);
+
+
+
+                logJson.put("event", event);
+                logJson.put("Data",data);
                 LocalStorage.savelog(context, logJson.toString());
 
             } catch (Exception e) {

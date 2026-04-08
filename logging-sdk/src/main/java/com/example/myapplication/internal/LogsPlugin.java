@@ -8,15 +8,17 @@ public class LogsPlugin {
     private String host;
     private int port;
     private long batchSize;
+    private String country;
 
     private LogsPlugin(String client, String project, String userId,
-                       String host, int port, long batchSize) {
+                       String host, int port, long batchSize,String country) {
         this.client = client;
         this.project = project;
         this.userId = userId;
         this.host = host;
         this.port = port;
         this.batchSize = batchSize;
+        this.country =country;
     }
     public String getClient() {
         return client;
@@ -37,6 +39,9 @@ public class LogsPlugin {
     public int getPort() {
         return port;
     }
+    public String getCountry(){
+        return country;
+    }
 
     public long getBatchSize() {
         return batchSize;
@@ -50,6 +55,7 @@ public class LogsPlugin {
         private String host;
         private int port;
         private long batchSize;
+        private String country;
 
         public Builder setClient(String client) {
             this.client = client;
@@ -60,7 +66,10 @@ public class LogsPlugin {
             this.project = project;
             return this;
         }
-
+        public Builder setCountry(String country) {
+            this.country = country;
+            return  this;
+        }
         public Builder setUserId(String userId) {
             this.userId = userId;
             return this;
@@ -89,7 +98,7 @@ public class LogsPlugin {
             if (userId == null) throw new IllegalArgumentException("UserId required");
             if (project == null) throw new IllegalArgumentException("Project required");
 
-            return new LogsPlugin(client, project, userId, host, port, batchSize);
+            return new LogsPlugin(client, project, userId, host, port, batchSize,country);
         }
     }
 }

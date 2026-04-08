@@ -1,7 +1,9 @@
 package com.example.myapplication.internal;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class LoggingSDK {
@@ -10,6 +12,7 @@ public class LoggingSDK {
     public static LoggingSDK instance;
 
     public static void init(Context context,LogsPlugin config) {
+        Log.d("This is good", Locale.getDefault().getCountry());
             if (plugin == null) {
                 plugin = Plugin.init(context,config);
             }

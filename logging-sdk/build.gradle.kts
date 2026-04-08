@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.example.logging_sdk"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
