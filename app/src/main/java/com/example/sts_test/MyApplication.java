@@ -12,7 +12,7 @@ public class MyApplication extends Application{
                 .setUserId("user1")
                 .setHost("server.com")
                 .setPort(9090)
-                .setBatchSize(10)
+                .setBatchSize(3)
                 .build();
         LoggingSDK.init(this, config);
         }

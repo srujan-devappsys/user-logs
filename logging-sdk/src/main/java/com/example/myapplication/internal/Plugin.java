@@ -25,11 +25,9 @@ public class Plugin {
     private final Context context;
     private final LogsPlugin config;
 
-    // 🔥 Threads (like grpc)
     private Handler logHandler;
     private Handler networkHandler;
 
-    // 🔥 Counters
     private final AtomicInteger logCounter = new AtomicInteger(0);
     private final AtomicBoolean isUploading = new AtomicBoolean(false);
 
@@ -43,7 +41,6 @@ public class Plugin {
         initNetworkListener();
     }
 
-    // ✅ Builder style init
     public static Plugin init(Context context, LogsPlugin config) {
         if (instance == null) {
             instance = new Plugin(context, config);
@@ -58,7 +55,6 @@ public class Plugin {
         return instance;
     }
 
-    // 🔥 THREAD SETUP
     private void initThreads() {
         HandlerThread logThread = new HandlerThread("logThread");
         logThread.start();
@@ -69,7 +65,6 @@ public class Plugin {
         networkHandler = new Handler(networkThread.getLooper());
     }
 
-    // 🔥 LOG METHOD (Grpc style)
 //    public void log(String message) {
 //        logHandler.post(() -> {
 //
@@ -86,7 +81,7 @@ public class Plugin {
 //                e.printStackTrace();
 //            }
 //
-//            // 🔁 Batch logic
+//
 //            if (logCounter.incrementAndGet() >= config.getBatchSize()) {
 //                logCounter.set(0);
 //
@@ -106,17 +101,14 @@ public class Plugin {
 
             try {
                 JSONObject logJson = new JSONObject();
-                SimpleDateFormat sdf = new SimpleDateFormat(
-                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                        Locale.getDefault()
-                );
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 logJson.put("message", message);
                 logJson.put("event_time", sdf.format(new Date()));
                 logJson.put("level", level);
                 logJson.put("display_name", android.os.Build.MODEL);
                 logJson.put("os", "Android " + android.os.Build.VERSION.RELEASE);
-                logJson.put("event_type","abc");
+                logJson.put("event_type","USER_LOGIN");
 
                 if (stackTrace != null) {
                     logJson.put("stackTrace", stackTrace);
@@ -141,8 +133,6 @@ public class Plugin {
         });
     }
 
-
-    // 🔥 NETWORK LISTENER
     private void initNetworkListener() {
 
         NetworkChangeReceiver receiver = new NetworkChangeReceiver(isAvailable -> {
@@ -161,7 +151,6 @@ public class Plugin {
         context.registerReceiver(receiver, filter);
     }
 
-    // 🔥 TRIGGER UPLOAD (safe)
     private void triggerUpload() {
         if (!isUploading.compareAndSet(false, true)) {
             Log.d("PLUGIN", "Upload already running");
@@ -177,7 +166,6 @@ public class Plugin {
         });
     }
 
-    // 🔥 MAIN UPLOAD LOGIC
     private void uploadLogsInternal() {
 
         try {
@@ -197,7 +185,6 @@ public class Plugin {
                 Log.d("PLUGIN", "No logs to upload");
                 return;
             }
-
             boolean success = S3Uploader.uploadToS3(presignedUrl, logs);
 
             if (success) {
@@ -214,7 +201,7 @@ public class Plugin {
         }
     }
 
-    // 🔁 RETRY
+
     private void retryUpload() {
         new Handler(context.getMainLooper()).postDelayed(this::triggerUpload, 5000);
     }

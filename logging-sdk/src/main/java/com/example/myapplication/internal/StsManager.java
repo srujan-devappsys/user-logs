@@ -15,7 +15,7 @@ public class StsManager {
     public  static String getPresignedUrl(LogsPlugin config){
             try{
 
-                String urlString = "http://192.168.1.10:8080/track/user_logs"
+                String urlString = "http://192.168.1.77:8080/track/user_logs"
                         + "?client=" + config.getClient()
                         + "&project=" + config.getProject()
                         + "&userId=" + config.getUserId();
@@ -37,6 +37,7 @@ public class StsManager {
                 String path = json.getString("path");
 
                 Log.d("UPLOAD", "Uploading to: " + path);
+                Log.d("URL","This is the response of the url " + response.toString());
                 return response.toString();
             }catch (Exception e) {
                 e.printStackTrace();
