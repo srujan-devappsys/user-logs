@@ -9,16 +9,19 @@ public class LogsPlugin {
     private int port;
     private long batchSize;
     private String country;
+    private String carrier;
+    private static double latitude;
+    private static double longitude;
 
     private LogsPlugin(String client, String project, String userId,
-                       String host, int port, long batchSize,String country) {
+                       String host, int port, long batchSize,String carrier) {
         this.client = client;
         this.project = project;
         this.userId = userId;
         this.host = host;
         this.port = port;
         this.batchSize = batchSize;
-        this.country =country;
+        this.carrier =carrier;
     }
     public String getClient() {
         return client;
@@ -46,8 +49,10 @@ public class LogsPlugin {
     public long getBatchSize() {
         return batchSize;
     }
-
-    // ✅ Builder
+    private String getCarrier()
+    {
+        return  carrier;
+    }
     public static final class Builder {
         private String client;
         private String project;
@@ -56,6 +61,13 @@ public class LogsPlugin {
         private int port;
         private long batchSize;
         private String country;
+        private String carrier;
+
+        public Builder setCarrier(String carrier)
+        {
+            this.carrier = carrier;
+            return  this;
+        }
 
         public Builder setClient(String client) {
             this.client = client;
@@ -65,10 +77,6 @@ public class LogsPlugin {
         public Builder setProject(String project) {
             this.project = project;
             return this;
-        }
-        public Builder setCountry(String country) {
-            this.country = country;
-            return  this;
         }
         public Builder setUserId(String userId) {
             this.userId = userId;
@@ -91,14 +99,12 @@ public class LogsPlugin {
         }
 
         public LogsPlugin build() {
-
-            // 🔥 Optional validations (recommended)
             if (host == null) throw new IllegalArgumentException("Host required");
             if (port <= 0) throw new IllegalArgumentException("Invalid port");
             if (userId == null) throw new IllegalArgumentException("UserId required");
             if (project == null) throw new IllegalArgumentException("Project required");
 
-            return new LogsPlugin(client, project, userId, host, port, batchSize,country);
+            return new LogsPlugin(client, project, userId, host, port, batchSize,carrier);
         }
     }
 }

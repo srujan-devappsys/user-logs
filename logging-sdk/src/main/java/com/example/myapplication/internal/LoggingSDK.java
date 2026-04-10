@@ -8,8 +8,9 @@ import java.util.Map;
 
 public class LoggingSDK {
     private static Plugin plugin;
-
     public static LoggingSDK instance;
+    private static double latitude;
+    private static double longitude;
 
     public static void init(Context context,LogsPlugin config) {
         Log.d("This is good", Locale.getDefault().getCountry());
@@ -23,5 +24,12 @@ public class LoggingSDK {
             throw new IllegalStateException("SDK not initialized");
         }
         plugin.log(level, message, properties);
+    }
+
+
+    public static void updateLocation(double lat, double lon) {
+        latitude = lat;
+        longitude = lon;
+        plugin.updateLocation(lat,lon);
     }
     }

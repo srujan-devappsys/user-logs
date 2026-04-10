@@ -44,4 +44,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(project(":logging-sdk"))
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
 }

@@ -18,6 +18,7 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 public class Plugin {
 
     private static Plugin instance;
@@ -27,7 +28,8 @@ public class Plugin {
 
     private Handler logHandler;
     private Handler networkHandler;
-
+    private static double latitude;
+    private static double longitude;
     private final AtomicInteger logCounter = new AtomicInteger(0);
     private final AtomicBoolean isUploading = new AtomicBoolean(false);
 
@@ -47,7 +49,10 @@ public class Plugin {
         }
         return instance;
     }
-
+    public  void updateLocation(double lat, double lon) {
+        latitude = lat;
+        longitude = lon;
+    }
     public static Plugin getInstance() {
         if (instance == null) {
             throw new IllegalStateException("Plugin not initialized");
@@ -103,8 +108,9 @@ public class Plugin {
 
             try {
                 JSONObject logJson = new JSONObject();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+//                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                sdf.format(new Date());
                 JSONObject event = new JSONObject();
                 JSONObject data = new JSONObject();
                 //Event
@@ -112,7 +118,7 @@ public class Plugin {
                 event.put("event_type", "USER_LOGIN");
                 event.put("display_name", android.os.Build.MODEL);
                 event.put("message", message);
-                event.put("event_time", sdf.format(new Date()));
+                event.put("event_time",Utilityy.getEventTime());
                 if (properties != null) {
                     JSONObject props = new JSONObject(properties);
                     event.put("properties", props);
@@ -122,8 +128,16 @@ public class Plugin {
                 }
 
                 //Data
-                data.put("Country",config.getCountry());
-                data.put("os", "Android " + android.os.Build.VERSION.RELEASE);
+                data.put("Country",Utilityy.getCountry());
+                data.put("Device_id",Utilityy.getDeviceId(context));
+                data.put("Device_type",Utilityy.getDeviceType());
+                data.put("Device_Family",Utilityy.getDeviceFamily());
+                data.put("Os_name",Utilityy.getOsName());
+                data.put("Latitude",latitude);
+                data.put("Longitude",longitude);
+                data.put("Region",Utilityy.getRegion(context,latitude,longitude));
+                data.put("City",Utilityy.getCity(context,latitude,longitude));
+                data.put("os", "Android"+Utilityy.getOsVersion());
                 data.put("level", level);
 
 
